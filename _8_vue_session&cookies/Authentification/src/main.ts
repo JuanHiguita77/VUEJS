@@ -10,7 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA0oHGkWO0nc32V34y9JepY7fW5MyN2Rbo",
+  apiKey: "google api key",
   authDomain: "curso-vue-d8ff9.firebaseapp.com",
   projectId: "curso-vue-d8ff9",
   storageBucket: "curso-vue-d8ff9.appspot.com",
