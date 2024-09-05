@@ -1,0 +1,74 @@
+<template>
+  <img alt="Vue logo" src="./assets/logo.png">
+
+  <div class="container" v-if="loading">
+    <h3>Loading</h3>
+  </div>
+
+  <div v-else>
+    <ul>
+      <li v-for="(comment, index) in result.getCommentsFromUser" :key="index"> <strong>{{ comment.name }}</strong>: {{ comment.text }}</li>
+
+    </ul>
+  </div>
+
+  <div class="error" v-if="error">
+    <h3>Error</h3>
+  </div>
+
+  <!-- Podemos crear botones con refresco de datos manual -->
+  <button @click="refetch">Refresh</button>
+
+  <h1>MUTATIONS</h1>
+
+  <!-- Valores fijos -->
+  <button @click="createComment({name: 'Juan', text: 'Hola mensaje'})">Send</button>
+
+  <!-- Desde variables --> 
+  <button @click="createComment()">Send</button>
+</template>
+
+<script lang="ts" setup>
+  import { useQuery, useMutation } from '@vue/apollo-composable';
+  import gql from 'graphql-tag';
+
+  const { result, loading, error, refetch, onResult, onError } = useQuery(gql`
+    query($name: String!) {
+      getCommentsFromUser(name: $name) {
+        name
+        text
+      }
+    }`, () => ({
+      name: "User 1"
+    }), {
+      //carga la cache primero para mejorar el rendimiento
+      fetchPolicy: 'cache-first',
+      pollInterval: 5000
+    })
+
+    onResult((queryResult) =>{
+      console.log(queryResult.data)
+      console.log(queryResult.loading)
+      console.log(queryResult.networkStatus)
+    })
+
+    onError((error) =>{
+      console.log(error.graphQLErrors);
+    })
+
+    //Mutations: se le dice cuando se va a modificar algo CRUD
+
+    const { mutate: createComment } = useMutation(gql`
+          mutation CreateComment($name: String!, $text: String!) {
+          createComment(name: $name, text: $text)
+        }
+    `, () => ({
+        variables: {
+          name: "juan variable",
+          text: "Hi from variable"
+        }}))
+</script>
+
+<style>
+
+</style>
