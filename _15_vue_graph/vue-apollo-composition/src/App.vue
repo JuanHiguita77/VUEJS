@@ -1,74 +1,111 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-
-  <div class="container" v-if="loading">
-    <h3>Loading</h3>
-  </div>
-
-  <div v-else>
-    <ul>
-      <li v-for="(comment, index) in result.getCommentsFromUser" :key="index"> <strong>{{ comment.name }}</strong>: {{ comment.text }}</li>
-
+    <h1>Hello options</h1>
+    
+    <!-- Cuando algo de apollo esta cargando $apollo.loading
+    o podemos especificar tal metodo -->
+    <div v-if="$apollo.queries.comments.loading">
+        <h3>Loading...</h3>
+    </div>
+    <ul v-else>
+        <li v-for="(comment, index ) in comments" :key="index">{{ comment.text }}</li>          
     </ul>
-  </div>
 
-  <div class="error" v-if="error">
-    <h3>Error</h3>
-  </div>
-
-  <!-- Podemos crear botones con refresco de datos manual -->
-  <button @click="refetch">Refresh</button>
-
-  <h1>MUTATIONS</h1>
-
-  <!-- Valores fijos -->
-  <button @click="createComment({name: 'Juan', text: 'Hola mensaje'})">Send</button>
-
-  <!-- Desde variables --> 
-  <button @click="createComment()">Send</button>
+    <!--MUTACION
+    <button @click="createComment">Send your comment</button>-->
 </template>
 
-<script lang="ts" setup>
-  import { useQuery, useMutation } from '@vue/apollo-composable';
-  import gql from 'graphql-tag';
+<script lang="ts">
+    import { defineComponent } from 'vue';
+    import gql from 'graphql-tag';
 
-  const { result, loading, error, refetch, onResult, onError } = useQuery(gql`
-    query($name: String!) {
-      getCommentsFromUser(name: $name) {
-        name
-        text
-      }
-    }`, () => ({
-      name: "User 1"
-    }), {
-      //carga la cache primero para mejorar el rendimiento
-      fetchPolicy: 'cache-first',
-      pollInterval: 5000
-    })
+    //Websocket
+    /*export default defineComponent({
+        apollo: {
+            comments: { 
+                query: gql`
+                    query($name: String!) {
+                        comments: getCommentsFromUser(name: $name) {
+                            text
+                        }
+                    }
+                `,
+                variables(){
+                    return {
+                        name: "User 1"//this.name
+                    }
+                },
+                fetchPolicy: 'cache-and-network',
+                pollInterval: 5000
+            },
+        },
+        data() {
+            return{
+                comments: []
+            }
+        },
+        methods: {
 
-    onResult((queryResult) =>{
-      console.log(queryResult.data)
-      console.log(queryResult.loading)
-      console.log(queryResult.networkStatus)
-    })
-
-    onError((error) =>{
-      console.log(error.graphQLErrors);
-    })
-
-    //Mutations: se le dice cuando se va a modificar algo CRUD
-
-    const { mutate: createComment } = useMutation(gql`
-          mutation CreateComment($name: String!, $text: String!) {
-          createComment(name: $name, text: $text)
         }
-    `, () => ({
-        variables: {
-          name: "juan variable",
-          text: "Hi from variable"
-        }}))
+    });*/
+
+    //Mutations en option API
+    /*export default defineComponent({
+        methods: {
+            createComment() {
+                this.$apollo.mutate({
+                    mutation: gql`
+                    mutation($name: String!, $text: String!) {
+                        createComment(name: $name, text: $text)
+                    }`,
+                    variables() 
+                    {
+                        return{
+                            name: "User 1",
+                            text: "Hi from variable option api"
+                        }
+                    },
+                    //Solo para cuando tenemos una query que devuelva datos para actualizar el contenido 
+                    update: (cache, { data: { createComment }}) => {
+                        let data = cache.readQuery({ query: createComment})
+                        data = {
+                            ...data,
+                            createComment
+                        }
+                        cache.writeQuery({ query: createComment, data })
+                    }
+                })
+            }
+        }
+    })*/
+
+    //Suscripciones en Option API
+
+    export default defineComponent({
+        data() {
+            return{
+                comments: []
+            }
+        },
+        apollo: {
+            $subscribe: {
+                comments: {
+                    query: gql`
+                        subscription {
+                            comments: commentCreated {
+                                name
+                                text
+                            }
+                        }
+                    `,
+                    result({ data }) {
+                        this.comments = data.commentCreated
+                    }
+                }
+            }
+        }
+    })
 </script>
 
-<style>
+<style scoped>
 
 </style>

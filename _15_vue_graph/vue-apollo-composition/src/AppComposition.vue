@@ -28,7 +28,7 @@
   import { defineComponent } from 'vue';
   import { useQuery, useMutation } from '@vue/apollo-composable';
   import gql from 'graphql-tag';
-
+/*
   export default defineComponent({
     setup() {
       const { result, loading, error, refetch, onResult, onError } = useQuery(gql`
@@ -68,9 +68,44 @@
         }
       }))
 
+      //Mutations: se le dice cuando se va a modificar algo CRUD
+
+    const { mutate: createComment, loading: createCommentLoading, error: createCommentError, on Done, onError } = useMutation(gql`
+          mutation CreateComment($name: String!, $text: String!) {
+          createComment(name: $name, text: $text)
+        }
+        `, () => ({
+          variables: {
+            name: "juan variable",
+            text: "Hi from variable"
+          },
+      update: (cache, { data: { createComment }}) => {
+        let data = cache.readQuery({ query: getAllComments})
+        data = {
+          ...data,
+          comments: [
+            ...data.comments,
+            {
+              name: "",
+              text: ""
+            }
+          ]
+        }
+        cache.writeQuery({ query: getAllComments, data })
+      }
+    }))
+
+      onDone((done) =>{
+        console.log(done)
+      })
+
+      onError((error) =>{
+        console.log(error.graphQLErrors);
+      })
+
       return { result, loading, error, refetch, onResult, onError, createComment }
     }
-  })
+  })*/
 </script>
 
 <style>
