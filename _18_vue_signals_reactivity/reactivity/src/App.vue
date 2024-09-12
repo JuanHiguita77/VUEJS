@@ -1,19 +1,17 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
 
-  <h1>SOLID REACTIVITY</h1>
-  <h2>{{ count }}</h2>
-
-  <button @click="setCount((v) => v + 1)">+ + +</button>
+  <h2>{{ count.value }}</h2>
+  <button @click="count.value++">+ + +</button>
 </template>
 
 <script lang="ts" setup>
-//Existen señales solid y angular
-  import { createSignal } from 'vue-signals/solid'
+//Reactividad en los objetos, no solo en variables primitivas
+  import { reactive } from 'vue';
 
-  //valor ,variable para modificar este valor
-  const [ count, setCount ] = createSignal(0)
-
+  const count = reactive({
+    value: 0
+  })
 </script>
 
 <style>
