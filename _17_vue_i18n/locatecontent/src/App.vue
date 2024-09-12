@@ -1,14 +1,22 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
 
-  <h1>hola mundo</h1>
-  <h2>Hello world</h2>
+  <!-- Inyectamos el contenido segun sea el idioma -->
+  <h1>{{ $t('message.hello', { name: name }) }}</h1>
+  <p>{{ $t('message.content') }}</p>
 
-  <p>Hello world with i18 vue package</p>
+  <h1>{{ $t('message.quantity', { count: 1 }) }}</h1>
+
+  //Menu for change the language
+  <select v-model="$i18n.locale">
+    <option v-for="locale in $i18n.availableLocales" :key="locale" :value="locale">{{ locale }}</option>  
+  </select>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+  import { ref } from 'vue';
 
+  const name = ref('Juan')
 </script>
 
 <style>
