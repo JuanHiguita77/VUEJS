@@ -9,9 +9,11 @@
 //Reactividad en los objetos, no solo en variables primitivas
   import { reactive } from 'vue';
 
-  const count = reactive({
+  //Para darle el tipo se le da directamente
+  const count/*:ICount*/ = reactive({
     value: 0
   })
+
 </script>
 
 <style>
