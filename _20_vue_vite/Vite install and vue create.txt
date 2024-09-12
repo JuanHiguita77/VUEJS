@@ -1,0 +1,9 @@
+Para crear un proyecto con vite: npm create vite viteProject --template vue-ts
+
+Con yarn: yarn create vite viteProject --template vue 
+
+No mezclar con npm luego de iniciar el projecto
+
+Instalar modulos:
+
+npm install == yarn
