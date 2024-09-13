@@ -7,3 +7,16 @@ No mezclar con npm luego de iniciar el projecto
 Instalar modulos:
 
 npm install == yarn
+
+Iniciar projeto
+
+npm run serve == npm run dev == yarn run dev
+
+Instalar paquetes
+
+Router:
+
+yarn add vue-router:Este no genera el encarpetado, solo instala
+
+
+Uso del @ en las rutas, se debe configurar el vite.config.js
