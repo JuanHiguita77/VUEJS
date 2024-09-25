@@ -8,7 +8,7 @@ Instalar modulos:
 
 npm install == yarn
 
-Iniciar projeto
+Iniciar projecto
 
 npm run serve == npm run dev == yarn run dev
 
@@ -17,6 +17,9 @@ Instalar paquetes
 Router:
 
 yarn add vue-router:Este no genera el encarpetado, solo instala
-
+npm i vue-router
 
 Uso del @ en las rutas, se debe configurar el vite.config.js
+
+npm i path
+yarn add path

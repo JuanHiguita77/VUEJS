@@ -6,6 +6,6 @@ import path from 'path'
 export default defineConfig({
   plugins: [vue()],
   resolve: {
-    '@': path.resolve(__dirname, './src')
+    '@': path.resolve(__dirname, './src'),
   }
 })
